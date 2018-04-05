@@ -8,9 +8,12 @@ serial_number=''
 def mfa_disassociate(user_name,serial_number):
 	print user_name,serial_number
 	mfa_device = iam.MfaDevice(user_name,serial_number)
+	print mfa_device
 	response = mfa_device.disassociate()
 	return response
-
+def deactivate_mfa_device(user_name,serial_number):
+	response = client.deactivate_mfa_device(UserName=user_name,SerialNumber=serial_number)
+	print "done"
 def get_mfa_serial_number(user_name):
         paginator = client.get_paginator('list_virtual_mfa_devices')
         response = client.list_virtual_mfa_devices(AssignmentStatus='Any')
@@ -33,4 +36,5 @@ def get_mfa_serial_number(user_name):
                                                                 serial_number=sno
                                                                 return sno
 print get_mfa_serial_number('user1')
-mfa_disassociate('user1',get_mfa_serial_number('user1'))
+#mfa_disassociate('user1',get_mfa_serial_number('user1'))
+deactivate_mfa_device('user1',get_mfa_serial_number('user1'))
