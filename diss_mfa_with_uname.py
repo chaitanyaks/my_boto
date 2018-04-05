@@ -8,7 +8,6 @@ app=Flask(__name__)
 api=Api(app)
 user_name=''
 serial_number=''
-iam=boto3.resource('iam')
 
 class Getmfa(Resource):
 	def get(self,user_name):
@@ -26,8 +25,7 @@ class Getmfa(Resource):
 								if u =='UserName' and uv == user_name:
 									serial_number=sno
 									print serial_number
-									mfa_device = iam.MfaDevice(user_name,serial_number)
-									response = mfa_device.disassociate()
+									response = client.deactivate_mfa_device(UserName=user_name,SerialNumber=serial_number)
 									return "{0} has been disassociated with mfa device".format(user_name)
 								else:
 									return "{0} User has not associated with mfa device".format(user_name)
